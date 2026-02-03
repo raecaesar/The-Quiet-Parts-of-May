@@ -1,125 +1,167 @@
 const timelines = {
   before: {
-    title: "Before I Met You",
-    description:
-      "The world felt grayscale. Every day was a fight to survive, and I was here but not fully alive.",
-    scenes: [
+    title: "Before We Met",
+    mood: "Monochrome",
+    leftName: "Me",
+    rightName: "Empty",
+    chapters: [
       {
-        chapter: "Chapter 1",
-        title: "Grayscale mornings",
+        title: "The Days Felt Gray",
+        speaker: "Me",
         text:
-          "I woke up to the same heavy sky. The bills were stacked on the table, and my heart felt numb — like I could hear life but not touch it.",
+          "My world was black and white. Every morning was a fight with gravity, and every night ended in the same silence. I was here, but I wasn’t alive.",
+        highlight:
+          "I carried the weight of Kenzie’s school fees, the arguments with my dad, and the pressure to work and build a business just to survive.",
+        choices: [
+          "Keep moving, even when it hurts.",
+          "Remember the moment I promised to protect Kenzie.",
+        ],
+        memory: [
+          "The day I took on Kenzie’s school fees.",
+          "The night I told myself I could handle everything alone.",
+        ],
       },
       {
-        chapter: "Chapter 2",
-        title: "Carrying Kenzie",
+        title: "Numb but Breathing",
+        speaker: "Me",
         text:
-          "I kept working because Kenzie needed his school fee. Every payment was a promise to keep him on the path I never had time to walk.",
-      },
-      {
-        chapter: "Chapter 3",
-        title: "Storms at home",
-        text:
-          "Fights with my dad left echoes in the house. I would stand in the doorway, unsure if I was leaving or just surviving another night.",
-      },
-      {
-        chapter: "Chapter 4",
-        title: "Numb survival",
-        text:
-          "Work and business kept me alive, but joy felt far away. I was here, but not really living.",
+          "I was working and hustling, yet nothing felt like mine. It was survival, not living — like my heart had gone quiet.",
+        highlight:
+          "Every plan felt heavy, every dream paused. Still, I kept going because I had to.",
+        choices: [
+          "Share how you felt unseen.",
+          "Recall the fight that broke the silence at home.",
+        ],
+        memory: [
+          "The first business step that didn’t feel like victory.",
+          "The quiet ride home after another fight.",
+        ],
       },
     ],
   },
   after: {
-    title: "After I Met You",
-    description:
-      "Color returned slowly. Your presence made the hard days feel lighter and gave me a reason to dream again.",
-    scenes: [
+    title: "After We Met",
+    mood: "Warm & Alive",
+    leftName: "Me",
+    rightName: "Her",
+    chapters: [
       {
-        chapter: "Chapter 1",
-        title: "A new light",
+        title: "You Brought the Color",
+        speaker: "Her",
         text:
-          "You arrived like a warm sunrise. For the first time in years, my chest felt open and my world felt soft.",
+          "Then you appeared, and everything softened. You made the world feel warm again — like the light had finally found me.",
+        highlight:
+          "You listened to my chaos and made it feel safe. You turned my tired days into something worth coming home to.",
+        choices: [
+          "Describe the first time you made me laugh again.",
+          "Write about the moment I knew I was falling for you.",
+        ],
+        memory: [
+          "The first message that felt like sunshine.",
+          "The moment I realized I wasn’t alone anymore.",
+        ],
       },
       {
-        chapter: "Chapter 2",
-        title: "Shared courage",
+        title: "Still Us, But Brighter",
+        speaker: "Me",
         text:
-          "When the bills were heavy, you sat beside me. You reminded me that I didn’t have to carry everything alone.",
-      },
-      {
-        chapter: "Chapter 3",
-        title: "Peace at home",
-        text:
-          "The noise at home didn’t disappear, but I had your voice in my head. It kept me calm, brave, and hopeful.",
-      },
-      {
-        chapter: "Chapter 4",
-        title: "Alive again",
-        text:
-          "Now the future feels vivid. I can feel my heart beating with purpose — because it beats with you.",
+          "Life didn’t stop being hard, but with you it felt possible. You turned my struggle into a story with hope.",
+        highlight:
+          "Now I want to build a life where we both can breathe — where we stay soft, even when the world is rough.",
+        choices: [
+          "Add the date you want to remember forever.",
+          "Share what you want our future to feel like.",
+        ],
+        memory: [
+          "Our first plan for the future.",
+          "The promise I made to always choose you.",
+        ],
       },
     ],
   },
 };
 
-const state = {
-  timeline: "before",
-  index: 0,
-};
+const body = document.body;
+const timelineTitle = document.getElementById("timeline-title");
+const storyChapter = document.getElementById("story-chapter");
+const storyMood = document.getElementById("story-mood");
+const storyTitle = document.getElementById("story-title");
+const storyText = document.getElementById("story-text");
+const storyHighlight = document.getElementById("story-highlight");
+const choicesContainer = document.getElementById("choices");
+const memoryList = document.getElementById("memory-list");
+const leftName = document.getElementById("left-name");
+const rightName = document.getElementById("right-name");
+const leftChar = document.getElementById("char-left");
+const rightChar = document.getElementById("char-right");
+const toggleButtons = document.querySelectorAll(".toggle-btn");
 
-const timelineButtons = document.querySelectorAll(".timeline-button");
-const timelineEl = document.getElementById("timeline");
-const titleEl = document.getElementById("timeline-title");
-const descriptionEl = document.getElementById("timeline-description");
-const chapterEl = document.getElementById("scene-chapter");
-const sceneTitleEl = document.getElementById("scene-title");
-const sceneTextEl = document.getElementById("scene-text");
-const indicatorEl = document.getElementById("scene-indicator");
-const prevButton = document.getElementById("prev");
-const nextButton = document.getElementById("next");
+let currentTimeline = "before";
+let currentChapter = 0;
 
-const setTimeline = (timeline) => {
-  state.timeline = timeline;
-  state.index = 0;
-  timelineButtons.forEach((button) => {
-    button.classList.toggle("active", button.dataset.timeline === timeline);
+const renderChoices = (choices) => {
+  choicesContainer.innerHTML = "";
+  choices.forEach((choice) => {
+    const button = document.createElement("button");
+    button.className = "choice-btn";
+    button.textContent = choice;
+    button.addEventListener("click", () => {
+      currentChapter = (currentChapter + 1) % timelines[currentTimeline].chapters.length;
+      renderStory();
+    });
+    choicesContainer.appendChild(button);
   });
-  timelineEl.classList.remove("before", "after");
-  timelineEl.classList.add(timeline);
-  updateScene();
 };
 
-const updateScene = () => {
-  const current = timelines[state.timeline];
-  const scene = current.scenes[state.index];
-  titleEl.textContent = current.title;
-  descriptionEl.textContent = current.description;
-  chapterEl.textContent = scene.chapter;
-  sceneTitleEl.textContent = scene.title;
-  sceneTextEl.textContent = scene.text;
-  indicatorEl.textContent = `${state.index + 1} / ${current.scenes.length}`;
-  prevButton.disabled = state.index === 0;
-  nextButton.disabled = state.index === current.scenes.length - 1;
+const renderMemory = (memory) => {
+  memoryList.innerHTML = "";
+  memory.forEach((note) => {
+    const item = document.createElement("li");
+    item.textContent = note;
+    memoryList.appendChild(item);
+  });
 };
 
-prevButton.addEventListener("click", () => {
-  if (state.index > 0) {
-    state.index -= 1;
-    updateScene();
+const setSpeakerFocus = (speaker) => {
+  if (speaker === "Her") {
+    rightChar.style.transform = "translateY(-6px) scale(1.03)";
+    leftChar.style.transform = "translateY(0) scale(0.97)";
+    rightChar.style.opacity = "1";
+    leftChar.style.opacity = "0.6";
+  } else {
+    leftChar.style.transform = "translateY(-6px) scale(1.03)";
+    rightChar.style.transform = "translateY(0) scale(0.97)";
+    leftChar.style.opacity = "1";
+    rightChar.style.opacity = currentTimeline === "before" ? "0.2" : "0.6";
   }
+};
+
+const renderStory = () => {
+  const timeline = timelines[currentTimeline];
+  const chapter = timeline.chapters[currentChapter];
+
+  timelineTitle.textContent = timeline.title;
+  storyChapter.textContent = `Chapter ${currentChapter + 1}`;
+  storyMood.textContent = timeline.mood;
+  storyTitle.textContent = chapter.title;
+  storyText.textContent = chapter.text;
+  storyHighlight.querySelector("p").textContent = chapter.highlight;
+  leftName.textContent = timeline.leftName;
+  rightName.textContent = timeline.rightName;
+  renderChoices(chapter.choices);
+  renderMemory(chapter.memory);
+  setSpeakerFocus(chapter.speaker);
+};
+
+toggleButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    toggleButtons.forEach((btn) => btn.classList.remove("active"));
+    button.classList.add("active");
+    currentTimeline = button.dataset.timeline;
+    currentChapter = 0;
+    body.classList.toggle("after", currentTimeline === "after");
+    renderStory();
+  });
 });
 
-nextButton.addEventListener("click", () => {
-  const current = timelines[state.timeline];
-  if (state.index < current.scenes.length - 1) {
-    state.index += 1;
-    updateScene();
-  }
-});
-
-timelineButtons.forEach((button) => {
-  button.addEventListener("click", () => setTimeline(button.dataset.timeline));
-});
-
-setTimeline(state.timeline);
+renderStory();
