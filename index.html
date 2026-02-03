@@ -1,0 +1,75 @@
+!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Before & After You</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="grain"></div>
+    <header class="hero">
+      <p class="eyebrow">An interactive letter for you</p>
+      <h1>Before & After You</h1>
+      <p class="subhead">
+        Two timelines. One heart. A story of how everything changed when I met you.
+      </p>
+    </header>
+
+    <main class="container">
+      <section class="timeline-controls" aria-label="Timeline chooser">
+        <button class="timeline-button active" data-timeline="before" type="button">
+          Before I Met You
+        </button>
+        <button class="timeline-button" data-timeline="after" type="button">
+          After I Met You
+        </button>
+      </section>
+
+      <section class="timeline" id="timeline">
+        <div class="timeline-header">
+          <h2 id="timeline-title">Before I Met You</h2>
+          <p id="timeline-description">
+            The world felt grayscale. Every day was a fight to survive, and I was
+            here but not fully alive.
+          </p>
+        </div>
+
+        <div class="card" id="scene-card">
+          <p class="chapter" id="scene-chapter">Chapter 1</p>
+          <h3 id="scene-title">Grayscale mornings</h3>
+          <p id="scene-text">
+            I woke up to the same heavy sky. The bills were stacked on the table,
+            and my heart felt numb — like I could hear life but not touch it.
+          </p>
+        </div>
+
+        <div class="scene-controls">
+          <button id="prev" type="button">Previous</button>
+          <div class="scene-indicator" id="scene-indicator">1 / 4</div>
+          <button id="next" type="button">Next</button>
+        </div>
+      </section>
+
+      <section class="letter">
+        <h2>Dear you,</h2>
+        <p>
+          Thank you for being my light, my calm, and my reason to keep going. I
+          wanted this small story to show the quiet parts of my life — and how
+          you made them bright.
+        </p>
+        <p class="signature">Forever yours.</p>
+      </section>
+    </main>
+
+    <footer class="footer">Made with love for Valentine’s Day.</footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
